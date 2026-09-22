@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Corrected Anion Gap</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#08454D">
+<style>
+:root{
+  --bg:#F5F7F8; --panel:#FFFFFF; --ink:#141A1F; --ink-soft:#4B5760;
+  --line:#DCE2E5; --teal:#0B6E7A; --teal-deep:#08454D; --teal-tint:#E3F1F2;
+  --amber:#B5560A; --amber-tint:#FCEEE0; --red:#B4231F; --red-tint:#FBEAE9;
+  --green:#276E4A; --green-tint:#E7F3EC;
+  --mono:'IBM Plex Mono',Consolas,monospace; --sans:'Inter',-apple-system,sans-serif;
+  --disp:'Space Grotesk','Inter',sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;padding:0 0 60px 0;}
+.app{max-width:640px;margin:0 auto;padding:0 18px;}
+.back{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--teal);text-decoration:none;}
+.masthead{border-bottom:2px solid var(--ink);padding:10px 0 14px 0;margin-bottom:22px;}
+.masthead h1{font-family:var(--disp);font-size:21px;font-weight:700;margin:0 0 4px 0;letter-spacing:-0.01em;}
+.masthead .tag{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--teal-deep);margin:0 0 12px 0;}
+label{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:5px;}
+select,input[type=number],input[type=text]{width:100%;padding:9px 10px;border:1px solid #C7CFD3;border-radius:4px;font-family:var(--sans);font-size:14.5px;background:#fff;color:var(--ink);}
+select:focus,input:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal);}
+.field{margin-bottom:13px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media (max-width:480px){.row3{grid-template-columns:1fr;}}
+.hint{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+.btn-primary{width:100%;background:var(--teal-deep);color:#fff;border:none;padding:14px;font-size:15px;font-weight:600;font-family:var(--disp);border-radius:5px;cursor:pointer;}
+.btn-primary:hover{background:#063339;}
+.ticket{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(20,26,31,0.06);}
+.ticket-top{background:var(--teal-deep);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;opacity:0.9;}
+.ticket-body{padding:20px 18px;}
+.result-hero{text-align:center;padding:6px 0 16px 0;border-bottom:1px dashed var(--line);margin-bottom:16px;}
+.result-hero .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:6px;}
+.result-hero .num{font-family:var(--mono);font-size:38px;font-weight:600;color:var(--teal-deep);line-height:1;}
+.result-hero .unit{font-size:13px;color:var(--ink-soft);}
+.interp{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:5px;margin-bottom:14px;font-size:13.5px;}
+.interp.normal{background:var(--green-tint);color:#1D4F35;}
+.interp.caution{background:var(--amber-tint);color:#5C3200;}
+.interp.high{background:var(--red-tint);color:#7A1815;}
+.formula-note{font-size:11.5px;color:var(--ink-soft);font-family:var(--mono);background:#F7F9FA;border:1px solid var(--line);border-radius:4px;padding:10px 12px;}
+.empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
+footer{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:30px;font-family:var(--mono);}
+
+.term-row{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px;}
+.term-row:first-child{border-top:none;}
+.term-row .v{font-family:var(--mono);font-weight:600;}
+</style>
+</head>
+<body>
+<div class="app">
+  <a href="../index.html" class="back">&larr; ALL TOOLS</a>
+  <div class="masthead">
+    <h1>Corrected Anion Gap</h1>
+    <div class="tag">AG = (Na+K) − (Cl+HCO3) &nbsp;·&nbsp; corrected for albumin, lactate, β-OHB</div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">Basic metabolic panel</div>
+    <div class="row3">
+      <div class="field"><label for="na">Na (mEq/L)</label><input type="number" id="na" placeholder="e.g. 138"></div>
+      <div class="field"><label for="k">K (mEq/L)</label><input type="number" id="k" step="0.1" placeholder="e.g. 4.2"></div>
+      <div class="field"><label for="cl">Cl (mEq/L)</label><input type="number" id="cl" placeholder="e.g. 102"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="hco3">HCO3 (mEq/L)</label><input type="number" id="hco3" placeholder="e.g. 22"></div>
+      <div class="field"><label for="albumin">Albumin (g/dL)</label><input type="number" id="albumin" step="0.1" placeholder="e.g. 2.8"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">Optional correction terms</div>
+    <div class="row2">
+      <div class="field"><label for="lactate">Lactate (mmol/L)</label><input type="number" id="lactate" step="0.1" placeholder="leave blank if not drawn"></div>
+      <div class="field"><label for="bohb">β-hydroxybutyrate (mmol/L)</label><input type="number" id="bohb" step="0.1" placeholder="leave blank if not drawn"></div>
+    </div>
+    <div class="hint">Blank fields are treated as zero contribution, not assumed normal — the breakdown below shows exactly which terms were used.</div>
+  </div>
+
+  <button class="btn-primary" id="calcBtn">Calculate Corrected AG</button>
+
+  <div style="margin-top:22px;" id="output">
+    <div class="ticket"><div class="ticket-body"><div class="empty-state">Enter Na, K, Cl, HCO3, and albumin to calculate.</div></div></div>
+  </div>
+
+  <footer>FOR CLINICIAN USE · NOT AUTONOMOUS PRESCRIBING</footer>
+</div>
+<script>
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const na = parseFloat(document.getElementById('na').value);
+  const k = parseFloat(document.getElementById('k').value);
+  const cl = parseFloat(document.getElementById('cl').value);
+  const hco3 = parseFloat(document.getElementById('hco3').value);
+  const albumin = parseFloat(document.getElementById('albumin').value);
+  const lactateRaw = document.getElementById('lactate').value;
+  const bohbRaw = document.getElementById('bohb').value;
+  const lactate = lactateRaw === '' ? null : parseFloat(lactateRaw);
+  const bohb = bohbRaw === '' ? null : parseFloat(bohbRaw);
+  const out = document.getElementById('output');
+  if([na,k,cl,hco3,albumin].some(v => isNaN(v))){
+    out.innerHTML = shell('<div class="empty-state">Na, K, Cl, HCO3, and albumin are all required.</div>');
+    return;
+  }
+  const ag = (na + k) - (cl + hco3);
+  const albuminTerm = 2.5 * (4.0 - albumin);
+  const lactateTerm = lactate === null ? 0 : lactate;
+  const bohbTerm = bohb === null ? 0 : bohb;
+  const correctedAG = ag + albuminTerm - lactateTerm - bohbTerm;
+
+  let interpClass = 'normal', interpText = 'Within typical normal range (8–12 mEq/L) once corrected.';
+  if(correctedAG > 12){ interpClass='caution'; interpText = 'Elevated corrected anion gap — consider unmeasured anions beyond those entered (e.g. other toxic alcohols, renal failure, other organic acids).'; }
+
+  out.innerHTML = shell(`
+    <div class="result-hero">
+      <div class="lbl">Corrected Anion Gap</div>
+      <span class="num">${correctedAG.toFixed(1)}</span><span class="unit"> mEq/L</span>
+    </div>
+    <div class="interp ${interpClass}">${interpText}</div>
+    <div class="term-row"><span>Raw AG (Na+K − Cl−HCO3)</span><span class="v">${ag.toFixed(1)}</span></div>
+    <div class="term-row"><span>+ Albumin correction (2.5 × (4.0 − ${albumin}))</span><span class="v">${albuminTerm>=0?'+':''}${albuminTerm.toFixed(1)}</span></div>
+    <div class="term-row"><span>− Lactate ${lactate===null?'(not entered)':''}</span><span class="v">${lactate===null?'—':'−'+lactateTerm.toFixed(1)}</span></div>
+    <div class="term-row"><span>− β-OHB ${bohb===null?'(not entered)':''}</span><span class="v">${bohb===null?'—':'−'+bohbTerm.toFixed(1)}</span></div>
+  `);
+});
+function shell(body){
+  return `<div class="ticket"><div class="ticket-top"><span>CORRECTED AG</span><span>${new Date().toLocaleString()}</span></div><div class="ticket-body">${body}</div></div>`;
+}
+</script>
+</body>
+</html>

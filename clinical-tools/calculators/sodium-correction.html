@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Expected Sodium Change</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#08454D">
+<style>
+:root{
+  --bg:#F5F7F8; --panel:#FFFFFF; --ink:#141A1F; --ink-soft:#4B5760;
+  --line:#DCE2E5; --teal:#0B6E7A; --teal-deep:#08454D; --teal-tint:#E3F1F2;
+  --amber:#B5560A; --amber-tint:#FCEEE0; --red:#B4231F; --red-tint:#FBEAE9;
+  --green:#276E4A; --green-tint:#E7F3EC;
+  --mono:'IBM Plex Mono',Consolas,monospace; --sans:'Inter',-apple-system,sans-serif;
+  --disp:'Space Grotesk','Inter',sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;padding:0 0 60px 0;}
+.app{max-width:640px;margin:0 auto;padding:0 18px;}
+.back{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--teal);text-decoration:none;}
+.masthead{border-bottom:2px solid var(--ink);padding:10px 0 14px 0;margin-bottom:22px;}
+.masthead h1{font-family:var(--disp);font-size:21px;font-weight:700;margin:0 0 4px 0;letter-spacing:-0.01em;}
+.masthead .tag{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--teal-deep);margin:0 0 12px 0;}
+label{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:5px;}
+select,input[type=number],input[type=text]{width:100%;padding:9px 10px;border:1px solid #C7CFD3;border-radius:4px;font-family:var(--sans);font-size:14.5px;background:#fff;color:var(--ink);}
+select:focus,input:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal);}
+.field{margin-bottom:13px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media (max-width:480px){.row3{grid-template-columns:1fr;}}
+.hint{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+.btn-primary{width:100%;background:var(--teal-deep);color:#fff;border:none;padding:14px;font-size:15px;font-weight:600;font-family:var(--disp);border-radius:5px;cursor:pointer;}
+.btn-primary:hover{background:#063339;}
+.ticket{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(20,26,31,0.06);}
+.ticket-top{background:var(--teal-deep);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;opacity:0.9;}
+.ticket-body{padding:20px 18px;}
+.result-hero{text-align:center;padding:6px 0 16px 0;border-bottom:1px dashed var(--line);margin-bottom:16px;}
+.result-hero .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:6px;}
+.result-hero .num{font-family:var(--mono);font-size:38px;font-weight:600;color:var(--teal-deep);line-height:1;}
+.result-hero .unit{font-size:13px;color:var(--ink-soft);}
+.interp{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:5px;margin-bottom:14px;font-size:13.5px;}
+.interp.normal{background:var(--green-tint);color:#1D4F35;}
+.interp.caution{background:var(--amber-tint);color:#5C3200;}
+.interp.high{background:var(--red-tint);color:#7A1815;}
+.formula-note{font-size:11.5px;color:var(--ink-soft);font-family:var(--mono);background:#F7F9FA;border:1px solid var(--line);border-radius:4px;padding:10px 12px;}
+.empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
+footer{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:30px;font-family:var(--mono);}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <a href="../index.html" class="back">&larr; ALL TOOLS</a>
+  <div class="masthead">
+    <h1>Expected Sodium Change</h1>
+    <div class="tag">Adrogué-Madias: ΔNa per liter = (Infusate Na+K − Serum Na) / (TBW+1)</div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">Patient</div>
+    <div class="row3">
+      <div class="field"><label for="serumna">Current serum Na (mEq/L)</label><input type="number" id="serumna" placeholder="e.g. 128"></div>
+      <div class="field"><label for="weight">Weight (kg)</label><input type="number" id="weight" placeholder="e.g. 80"></div>
+      <div class="field"><label for="sex">Sex</label>
+        <select id="sex">
+          <option value="0.6">Male, non-elderly (0.6)</option>
+          <option value="0.5">Male, elderly (0.5)</option>
+          <option value="0.5">Female, non-elderly (0.5)</option>
+          <option value="0.45">Female, elderly (0.45)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">Infusate</div>
+    <div class="row2">
+      <div class="field"><label for="fluid">Fluid</label>
+        <select id="fluid">
+          <option value="154,0">0.9% NaCl (Na 154, K 0)</option>
+          <option value="513,0">3% NaCl (Na 513, K 0)</option>
+          <option value="130,4">Lactated Ringers (Na 130, K 4)</option>
+          <option value="140,5">Plasma-Lyte A (Na 140, K 5)</option>
+          <option value="custom">Custom...</option>
+        </select>
+      </div>
+      <div class="field"><label for="volume">Volume to infuse (L)</label><input type="number" step="0.1" id="volume" placeholder="e.g. 1.0"></div>
+    </div>
+    <div class="row2" id="customFields" style="display:none;">
+      <div class="field"><label for="custNa">Custom infusate Na</label><input type="number" id="custNa" placeholder="mEq/L"></div>
+      <div class="field"><label for="custK">Custom infusate K</label><input type="number" id="custK" placeholder="mEq/L"></div>
+    </div>
+  </div>
+
+  <button class="btn-primary" id="calcBtn">Calculate Expected Change</button>
+
+  <div style="margin-top:22px;" id="output">
+    <div class="ticket"><div class="ticket-body"><div class="empty-state">Enter patient and infusate details to calculate.</div></div></div>
+  </div>
+
+  <footer>FOR CLINICIAN USE · NOT AUTONOMOUS PRESCRIBING</footer>
+</div>
+<script>
+document.getElementById('fluid').addEventListener('change', (e) => {
+  document.getElementById('customFields').style.display = e.target.value === 'custom' ? 'grid' : 'none';
+});
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const serumNa = parseFloat(document.getElementById('serumna').value);
+  const weight = parseFloat(document.getElementById('weight').value);
+  const tbwFactor = parseFloat(document.getElementById('sex').value);
+  const volume = parseFloat(document.getElementById('volume').value);
+  const fluidVal = document.getElementById('fluid').value;
+  const out = document.getElementById('output');
+
+  let infusateNa, infusateK;
+  if(fluidVal === 'custom'){
+    infusateNa = parseFloat(document.getElementById('custNa').value);
+    infusateK = parseFloat(document.getElementById('custK').value);
+  } else {
+    [infusateNa, infusateK] = fluidVal.split(',').map(Number);
+  }
+
+  if([serumNa,weight,volume,infusateNa,infusateK].some(v => isNaN(v)) || weight<=0){
+    out.innerHTML = shell('<div class="empty-state">Enter all fields (and custom fluid Na/K if selected) to calculate.</div>');
+    return;
+  }
+
+  const tbw = weight * tbwFactor;
+  const deltaNaPerL = (infusateNa + infusateK - serumNa) / (tbw + 1);
+  const totalDelta = deltaNaPerL * volume;
+  const newNa = serumNa + totalDelta;
+
+  out.innerHTML = shell(`
+    <div class="result-hero">
+      <div class="lbl">Expected New Na</div>
+      <span class="num">${newNa.toFixed(1)}</span><span class="unit"> mEq/L</span>
+    </div>
+    <div style="text-align:center;font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:-10px;margin-bottom:16px;">Δ ${totalDelta>=0?'+':''}${totalDelta.toFixed(1)} mEq/L from ${volume} L infused (${deltaNaPerL.toFixed(2)} mEq/L per liter)</div>
+    <div class="interp caution">This formula assumes an isolated infusion with no other intake/output — it doesn't account for urine output, insensible losses, or other concurrent IV fluids. Treat as a planning estimate, not a guarantee, and recheck Na after the infusion. Correction rate limits (commonly ≤8 mEq/L/24h for hyponatremia) still apply regardless of what this calculator outputs.</div>
+    <div class="formula-note">TBW = ${weight} × ${tbwFactor} = ${tbw.toFixed(1)} L &nbsp;·&nbsp; ΔNa/L = (${infusateNa}+${infusateK}−${serumNa})/(${tbw.toFixed(1)}+1)</div>
+  `);
+});
+function shell(body){
+  return `<div class="ticket"><div class="ticket-top"><span>Na CORRECTION</span><span>${new Date().toLocaleString()}</span></div><div class="ticket-body">${body}</div></div>`;
+}
+</script>
+</body>
+</html>

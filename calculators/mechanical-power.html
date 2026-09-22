@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mechanical Power</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#08454D">
+<style>
+:root{
+  --bg:#F5F7F8; --panel:#FFFFFF; --ink:#141A1F; --ink-soft:#4B5760;
+  --line:#DCE2E5; --teal:#0B6E7A; --teal-deep:#08454D; --teal-tint:#E3F1F2;
+  --amber:#B5560A; --amber-tint:#FCEEE0; --red:#B4231F; --red-tint:#FBEAE9;
+  --green:#276E4A; --green-tint:#E7F3EC;
+  --mono:'IBM Plex Mono',Consolas,monospace; --sans:'Inter',-apple-system,sans-serif;
+  --disp:'Space Grotesk','Inter',sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;padding:0 0 60px 0;}
+.app{max-width:640px;margin:0 auto;padding:0 18px;}
+.back{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--teal);text-decoration:none;}
+.masthead{border-bottom:2px solid var(--ink);padding:10px 0 14px 0;margin-bottom:22px;}
+.masthead h1{font-family:var(--disp);font-size:21px;font-weight:700;margin:0 0 4px 0;letter-spacing:-0.01em;}
+.masthead .tag{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:16px;}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--teal-deep);margin:0 0 12px 0;}
+label{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:5px;}
+select,input[type=number],input[type=text]{width:100%;padding:9px 10px;border:1px solid #C7CFD3;border-radius:4px;font-family:var(--sans);font-size:14.5px;background:#fff;color:var(--ink);}
+select:focus,input:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal);}
+.field{margin-bottom:13px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media (max-width:480px){.row3{grid-template-columns:1fr;}}
+.hint{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+.btn-primary{width:100%;background:var(--teal-deep);color:#fff;border:none;padding:14px;font-size:15px;font-weight:600;font-family:var(--disp);border-radius:5px;cursor:pointer;}
+.btn-primary:hover{background:#063339;}
+.ticket{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(20,26,31,0.06);}
+.ticket-top{background:var(--teal-deep);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;opacity:0.9;}
+.ticket-body{padding:20px 18px;}
+.result-hero{text-align:center;padding:6px 0 16px 0;border-bottom:1px dashed var(--line);margin-bottom:16px;}
+.result-hero .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:6px;}
+.result-hero .num{font-family:var(--mono);font-size:38px;font-weight:600;color:var(--teal-deep);line-height:1;}
+.result-hero .unit{font-size:13px;color:var(--ink-soft);}
+.interp{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:5px;margin-bottom:14px;font-size:13.5px;}
+.interp.normal{background:var(--green-tint);color:#1D4F35;}
+.interp.caution{background:var(--amber-tint);color:#5C3200;}
+.interp.high{background:var(--red-tint);color:#7A1815;}
+.formula-note{font-size:11.5px;color:var(--ink-soft);font-family:var(--mono);background:#F7F9FA;border:1px solid var(--line);border-radius:4px;padding:10px 12px;}
+.empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
+footer{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:30px;font-family:var(--mono);}
+
+.seg{display:flex;border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-bottom:14px;}
+.seg button{flex:1;padding:9px;border:none;background:#fff;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;color:var(--ink-soft);}
+.seg button.active{background:var(--teal-deep);color:#fff;}
+</style>
+</head>
+<body>
+<div class="app">
+  <a href="../index.html" class="back">&larr; ALL TOOLS</a>
+  <div class="masthead">
+    <h1>Mechanical Power</h1>
+    <div class="tag">0.098 × RR × VT × [pressure term]</div>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">Ventilator mode</div>
+    <div class="seg" id="modeToggle">
+      <button class="active" data-mode="vcv">Volume-controlled</button>
+      <button data-mode="pcv">Pressure-controlled</button>
+    </div>
+
+    <div class="row3">
+      <div class="field"><label for="rr">Respiratory rate</label><input type="number" id="rr" placeholder="e.g. 18"></div>
+      <div class="field"><label for="vt">Tidal volume (mL)</label><input type="number" id="vt" placeholder="e.g. 420"></div>
+      <div class="field"><label for="peep">PEEP (cmH2O)</label><input type="number" id="peep" placeholder="e.g. 8"></div>
+    </div>
+
+    <div id="vcvFields" class="row2">
+      <div class="field"><label for="ppeak">Peak pressure (cmH2O)</label><input type="number" id="ppeak" placeholder="e.g. 24"></div>
+      <div class="field"><label for="pplat">Plateau pressure (cmH2O)</label><input type="number" id="pplat" placeholder="e.g. 20"></div>
+    </div>
+    <div id="pcvFields" class="field" style="display:none;">
+      <label for="dpinsp">Driving pressure, ΔPinsp (cmH2O)</label><input type="number" id="dpinsp" placeholder="e.g. 12">
+    </div>
+  </div>
+
+  <button class="btn-primary" id="calcBtn">Calculate Mechanical Power</button>
+
+  <div style="margin-top:22px;" id="output">
+    <div class="ticket"><div class="ticket-body"><div class="empty-state">Enter ventilator settings to calculate.</div></div></div>
+  </div>
+
+  <footer>FOR CLINICIAN USE · NOT AUTONOMOUS PRESCRIBING</footer>
+</div>
+<script>
+document.querySelectorAll('#modeToggle button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#modeToggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('vcvFields').style.display = btn.dataset.mode==='vcv' ? 'grid':'none';
+    document.getElementById('pcvFields').style.display = btn.dataset.mode==='pcv' ? 'block':'none';
+  });
+});
+
+document.getElementById('calcBtn').addEventListener('click', () => {
+  const rr = parseFloat(document.getElementById('rr').value);
+  const vtMl = parseFloat(document.getElementById('vt').value);
+  const peep = parseFloat(document.getElementById('peep').value);
+  const mode = document.querySelector('#modeToggle button.active').dataset.mode;
+  const out = document.getElementById('output');
+  if(isNaN(rr) || isNaN(vtMl) || isNaN(peep)){
+    out.innerHTML = shell('<div class="empty-state">Enter RR, tidal volume, and PEEP.</div>');
+    return;
+  }
+  const vtL = vtMl/1000;
+  let mp, formulaNote;
+  if(mode === 'vcv'){
+    const ppeak = parseFloat(document.getElementById('ppeak').value);
+    const pplat = parseFloat(document.getElementById('pplat').value);
+    if(isNaN(ppeak) || isNaN(pplat)){ out.innerHTML = shell('<div class="empty-state">Enter peak and plateau pressure for volume-controlled mode.</div>'); return; }
+    mp = 0.098 * rr * vtL * (ppeak - (pplat - peep)/2);
+    formulaNote = `MP = 0.098×${rr}×${vtL.toFixed(2)}×[${ppeak}−(${pplat}−${peep})/2] (Gattinoni, VCV)`;
+  } else {
+    const dpinsp = parseFloat(document.getElementById('dpinsp').value);
+    if(isNaN(dpinsp)){ out.innerHTML = shell('<div class="empty-state">Enter driving pressure for pressure-controlled mode.</div>'); return; }
+    mp = 0.098 * rr * vtL * (dpinsp + peep);
+    formulaNote = `MP = 0.098×${rr}×${vtL.toFixed(2)}×[${dpinsp}+${peep}] (Becher, PCV simplified)`;
+  }
+  let interpClass='normal', interpText='Below the commonly cited 17 J/min injury-association threshold.';
+  if(mp >= 17){ interpClass='high'; interpText='At or above 17 J/min — this threshold has been associated with increased mortality in retrospective ARDS cohorts. Consider lung-protective adjustments (lower VT, lower driving pressure, or rate).'; }
+  else if(mp >= 12){ interpClass='caution'; interpText='Approaching the higher end of commonly reported ranges — worth trending.'; }
+  out.innerHTML = shell(`
+    <div class="result-hero">
+      <div class="lbl">Mechanical Power</div>
+      <span class="num">${mp.toFixed(1)}</span><span class="unit"> J/min</span>
+    </div>
+    <div class="interp ${interpClass}">${interpText}</div>
+    <div class="formula-note">${formulaNote}</div>
+  `);
+});
+function shell(body){
+  return `<div class="ticket"><div class="ticket-top"><span>MECHANICAL POWER</span><span>${new Date().toLocaleString()}</span></div><div class="ticket-body">${body}</div></div>`;
+}
+</script>
+</body>
+</html>
