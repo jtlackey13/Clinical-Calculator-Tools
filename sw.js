@@ -1,4 +1,4 @@
-const CACHE = 'clinical-tools-v4';
+const CACHE = 'clinical-tools-v5';
 // Add new calculator pages to this list as you build them.
 const ASSETS = [
   './index.html',
@@ -19,6 +19,7 @@ const ASSETS = [
   './calculators/papi.html',
   './calculators/pasp-tr-velocity.html',
   './calculators/pfp-ratio.html',
+  './calculators/pleural-effusion.html',
   './calculators/pvr.html',
   './calculators/resp-score.html',
   './calculators/save-score.html',
@@ -26,6 +27,7 @@ const ASSETS = [
   './calculators/sodium-correction.html',
   './calculators/stewart-figge.html',
   './calculators/svr.html',
+  './calculators/tapse-pasp.html',
   './calculators/tcd-icp-cpp.html',
   './calculators/vbg-to-abg.html',
   './calculators/vis-score.html',
