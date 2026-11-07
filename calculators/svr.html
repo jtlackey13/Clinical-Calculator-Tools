@@ -70,6 +70,7 @@ footer{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:30px;fo
       <div class="field"><label for="rap">RAP / CVP (mmHg)</label><input type="number" id="rap" placeholder="e.g. 8"></div>
       <div class="field"><label for="co">CO (L/min)</label><input type="number" id="co" step="0.1" placeholder="e.g. 5.0"></div>
     </div>
+    <div class="field"><label for="bsa">BSA (m², optional — for SVRI)</label><input type="number" step="0.01" id="bsa" placeholder="e.g. 1.9"></div>
   </div>
 
   <button class="btn-primary" id="calcBtn">Calculate SVR</button>
@@ -85,6 +86,7 @@ document.getElementById('calcBtn').addEventListener('click', () => {
   const map = parseFloat(document.getElementById('map').value);
   const rap = parseFloat(document.getElementById('rap').value);
   const co = parseFloat(document.getElementById('co').value);
+  const bsa = parseFloat(document.getElementById('bsa').value);
   const out = document.getElementById('output');
   if(isNaN(map) || isNaN(rap) || isNaN(co) || co<=0){
     out.innerHTML = shell('<div class="empty-state">Enter valid MAP, RAP, and CO (CO must be greater than 0).</div>');
@@ -94,13 +96,20 @@ document.getElementById('calcBtn').addEventListener('click', () => {
   let interpClass = 'normal', interpText = 'Within normal range (800–1200 dynes·s·cm⁻⁵).';
   if(svr < 800){ interpClass='caution'; interpText = 'Below normal range — suggests vasodilation (e.g. distributive/septic shock, liver disease, post-cardiotomy vasoplegia).'; }
   else if(svr > 1200){ interpClass='caution'; interpText = 'Above normal range — suggests vasoconstriction (e.g. cardiogenic shock, hypovolemia, high-dose vasopressors).'; }
+  let svriHtml = '';
+  if(!isNaN(bsa) && bsa>0){
+    const ci = co / bsa;
+    const svri = 80 * (map - rap) / ci;
+    svriHtml = `<div style="text-align:center;font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:-10px;margin-bottom:16px;">SVRI = ${svri.toFixed(0)} dynes·s·cm⁻⁵·m² &nbsp;(normal ≈ 1970–2390)</div>`;
+  }
   out.innerHTML = shell(`
     <div class="result-hero">
       <div class="lbl">SVR</div>
       <span class="num">${svr.toFixed(0)}</span><span class="unit"> dynes·s·cm⁻⁵</span>
     </div>
+    ${svriHtml}
     <div class="interp ${interpClass}">${interpText}</div>
-    <div class="formula-note">SVR = 80 × (MAP − RAP) / CO &nbsp;·&nbsp; normal range ≈ 800–1200 dynes·s·cm⁻⁵</div>
+    <div class="formula-note">SVR = 80 × (MAP − RAP) / CO &nbsp;·&nbsp; normal range ≈ 800–1200 dynes·s·cm⁻⁵${!isNaN(bsa)&&bsa>0 ? ' &nbsp;·&nbsp; SVRI = 80 × (MAP − RAP) / CI, CI = CO/BSA' : ''}</div>
   `);
 });
 function shell(body){

@@ -53,6 +53,9 @@ select:focus,input:focus{outline:2px solid var(--teal);outline-offset:1px;border
 .empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
 footer{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:30px;font-family:var(--mono);}
 
+.term-row{display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px;}
+.term-row:first-child{border-top:none;}
+.term-row .v{font-family:var(--mono);font-weight:600;}
 </style>
 </head>
 <body>
@@ -95,11 +98,14 @@ document.getElementById('calcBtn').addEventListener('click', () => {
   const area = Math.PI * Math.pow(lvot/2, 2);
   const sv = area * vti;
   const co = (sv * hr) / 1000;
+  const minuteDistance = hr * vti;
   let ciText = '';
+  let sviRow = '';
   let interpClass='normal', interpText=`Stroke volume ${sv.toFixed(1)} mL, cardiac output ${co.toFixed(2)} L/min.`;
   if(!isNaN(bsa) && bsa>0){
     const ci = co / bsa;
-    ciText = `<div style="text-align:center;font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:-10px;margin-bottom:16px;">CI = ${ci.toFixed(2)} L/min/m²</div>`;
+    const svi = sv / bsa;
+    ciText = `<div style="text-align:center;font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:-10px;margin-bottom:16px;">CI = ${ci.toFixed(2)} L/min/m² &nbsp;·&nbsp; SVI = ${svi.toFixed(1)} mL/m²</div>`;
     if(ci < 2.2){ interpClass='caution'; interpText = 'CI below 2.2 L/min/m² — consistent with a low-output state; correlate clinically.'; }
   }
   out.innerHTML = shell(`
@@ -109,7 +115,9 @@ document.getElementById('calcBtn').addEventListener('click', () => {
     </div>
     ${ciText}
     <div class="interp ${interpClass}">${interpText}</div>
-    <div class="formula-note">LVOT area = π×(${lvot}/2)² = ${area.toFixed(2)} cm² &nbsp;·&nbsp; SV = ${area.toFixed(2)}×${vti} = ${sv.toFixed(1)} mL &nbsp;·&nbsp; CO = SV×HR/1000</div>
+    <div class="term-row"><span>Stroke volume (SV)</span><span class="v">${sv.toFixed(1)} mL</span></div>
+    <div class="term-row"><span>Minute distance (HR×VTI)</span><span class="v">${minuteDistance.toFixed(0)}</span></div>
+    <div class="formula-note">LVOT area = π×(${lvot}/2)² = ${area.toFixed(2)} cm² &nbsp;·&nbsp; SV = ${area.toFixed(2)}×${vti} = ${sv.toFixed(1)} mL &nbsp;·&nbsp; CO = SV×HR/1000 &nbsp;·&nbsp; Minute distance = HR×VTI (dimensionless surrogate flow index, not a volume)</div>
   `);
 });
 function shell(body){

@@ -70,6 +70,7 @@ footer{text-align:center;font-size:11px;color:var(--ink-soft);margin-top:30px;fo
       <div class="field"><label for="pcwp">PCWP (mmHg)</label><input type="number" id="pcwp" placeholder="e.g. 10"></div>
       <div class="field"><label for="co">CO (L/min)</label><input type="number" id="co" step="0.1" placeholder="e.g. 5.0"></div>
     </div>
+    <div class="field"><label for="bsa">BSA (m², optional — for PVRI)</label><input type="number" step="0.01" id="bsa" placeholder="e.g. 1.9"></div>
   </div>
 
   <button class="btn-primary" id="calcBtn">Calculate PVR</button>
@@ -85,6 +86,7 @@ document.getElementById('calcBtn').addEventListener('click', () => {
   const mpap = parseFloat(document.getElementById('mpap').value);
   const pcwp = parseFloat(document.getElementById('pcwp').value);
   const co = parseFloat(document.getElementById('co').value);
+  const bsa = parseFloat(document.getElementById('bsa').value);
   const out = document.getElementById('output');
   if(isNaN(mpap) || isNaN(pcwp) || isNaN(co) || co<=0){
     out.innerHTML = shell('<div class="empty-state">Enter valid MPAP, PCWP, and CO (CO must be greater than 0).</div>');
@@ -94,14 +96,24 @@ document.getElementById('calcBtn').addEventListener('click', () => {
   const pvrWood = (mpap - pcwp) / co;
   let interpClass = 'normal', interpText = 'Within normal range (<250 dynes·s·cm⁻⁵ / <3 Wood units).';
   if(pvrWood >= 3){ interpClass='caution'; interpText = 'Elevated — suggests pulmonary hypertension, RV afterload concern. Relevant to RV protection strategy and inhaled pulmonary vasodilator consideration.'; }
+  let pvriHtml = '';
+  let pvriNote = '';
+  if(!isNaN(bsa) && bsa>0){
+    const ci = co / bsa;
+    const pvriDynes = 80 * (mpap - pcwp) / ci;
+    const pvriWood = (mpap - pcwp) / ci;
+    pvriHtml = `<div style="text-align:center;font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:-10px;margin-bottom:16px;">PVRI = ${pvriDynes.toFixed(0)} dynes·s·cm⁻⁵·m² (${pvriWood.toFixed(2)} WU·m²)</div>`;
+    pvriNote = ' &nbsp;·&nbsp; PVRI = 80 × (MPAP − PCWP) / CI, CI = CO/BSA — indexed PVR thresholds are less standardized than SVRI; use as a reference value, not a validated cutoff.';
+  }
   out.innerHTML = shell(`
     <div class="result-hero">
       <div class="lbl">PVR</div>
       <span class="num">${pvrDynes.toFixed(0)}</span><span class="unit"> dynes·s·cm⁻⁵</span>
     </div>
     <div style="text-align:center;font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:-10px;margin-bottom:16px;">${pvrWood.toFixed(2)} Wood units</div>
+    ${pvriHtml}
     <div class="interp ${interpClass}">${interpText}</div>
-    <div class="formula-note">PVR = 80 × (MPAP − PCWP) / CO &nbsp;·&nbsp; Wood units = (MPAP − PCWP) / CO &nbsp;·&nbsp; normal <250 dynes·s·cm⁻⁵ (<3 WU)</div>
+    <div class="formula-note">PVR = 80 × (MPAP − PCWP) / CO &nbsp;·&nbsp; Wood units = (MPAP − PCWP) / CO &nbsp;·&nbsp; normal <250 dynes·s·cm⁻⁵ (<3 WU)${pvriNote}</div>
   `);
 });
 function shell(body){
